@@ -57,20 +57,21 @@ public class MyApplication {
         Log.p("CN1 App started");
     	
     	Form hi = new Form("Browser", new BorderLayout());
-    	SocketIO socket = new SocketIO("http://192.168.8.100:3030");
+    	SocketIO socket = new SocketIO("http://192.168.8.100:3030", "{transports: ['websocket']}");
     	
-    	socket.emit("hello", null, new SuccessCallback<String>() {
+    	    	
+    	socket.emit("authenticate", new String[] {"{\"strategy\": \"local\", \"email\": \"test@yahoo.fr\", \"password\": \"test\"}"}, new SuccessCallback<String>() {
 			public void onSucess(String value) {
 				Log.p("Socket answer: "+value);
 			}
 		});
     	
     	BrowserComponent browser = socket.getBrowserComponent();
-    	
-    	
+    	    	
     	Button b = new Button("Emit to server");
     	b.addActionListener(new ActionListener<ActionEvent>() {
 			public void actionPerformed(ActionEvent evt) {
+				System.out.println("Clicked");
 				socket.emit("click", null, new SuccessCallback<String>() {
 					public void onSucess(String value) {
 						Log.p("Socket click answer: "+value);
@@ -78,7 +79,7 @@ public class MyApplication {
 				});
 			}
 		});
-    	hi.add(BorderLayout.CENTER, browser);
+    	//hi.add(BorderLayout.CENTER, browser);
     	hi.add(BorderLayout.SOUTH, b);
     	
     	hi.show();
